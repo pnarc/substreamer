@@ -7,7 +7,9 @@ import SubsonicAPI, {
   type ArtistInfo2,
   type ArtistWithAlbumsID3,
   type Child,
+  type Directory,
   type Genre,
+  type MusicFolder,
   type Playlist,
   type PlaylistWithSongs,
   type ScanStatus,
@@ -755,6 +757,59 @@ export async function getSimilarSongs2(artistId: string, count = 20): Promise<Ch
   } catch {
     return [];
   }
+}
+
+export interface FolderEntry {
+  id: string;
+  name: string;
+}
+
+export async function getMusicFolders(): Promise<MusicFolder[]> {
+  const api = getApi();
+  if (!api) return [];
+  const response = await api.getMusicFolders();
+  throwIfSubsonicFailure(response, 'getMusicFolders');
+  return response.musicFolders?.musicFolder ?? [];
+}
+
+export async function getFolderIndexes(
+  musicFolderId: string | number,
+): Promise<{ folders: FolderEntry[]; songs: Child[] }> {
+  const api = getApi();
+  if (!api) return { folders: [], songs: [] };
+  const response = await api.getIndexes({ musicFolderId });
+  throwIfSubsonicFailure(response, 'getIndexes');
+  const indexes = response.indexes;
+  const folders: FolderEntry[] = [];
+  for (const bucket of indexes?.index ?? []) {
+    for (const artist of bucket.artist ?? []) {
+      folders.push({ id: artist.id, name: artist.name });
+    }
+  }
+  return {
+    folders,
+    songs: (indexes?.child ?? []).filter((child) => !child.isDir),
+  };
+}
+
+export async function getMusicDirectory(
+  id: string,
+): Promise<{ folders: FolderEntry[]; songs: Child[] }> {
+  const api = getApi();
+  if (!api) return { folders: [], songs: [] };
+  const response = await api.getMusicDirectory({ id });
+  throwIfSubsonicFailure(response, 'getMusicDirectory');
+  const directory: Directory | undefined = response.directory;
+  const folders: FolderEntry[] = [];
+  const songs: Child[] = [];
+  for (const child of directory?.child ?? []) {
+    if (child.isDir) {
+      folders.push({ id: child.id, name: child.title || child.album || child.id });
+    } else {
+      songs.push(child);
+    }
+  }
+  return { folders, songs };
 }
 
 /**

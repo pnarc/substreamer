@@ -16,16 +16,18 @@ import {
 } from '../store/layoutPreferencesStore';
 import { AlbumLibraryListScreen } from './album-library-list';
 import { ArtistListScreen } from './artist-list';
+import { FolderLibraryListScreen } from './folder-library-list';
 import { PlaylistListScreen } from './playlist-list';
 import { SongLibraryListScreen } from './song-library-list';
 
-type LibrarySegment = 'albums' | 'artists' | 'playlists' | 'songs';
+type LibrarySegment = 'albums' | 'artists' | 'folders' | 'playlists' | 'songs';
 
 const SEGMENT_KEYS = [
   { key: 'songs', labelKey: 'songs' },
   { key: 'albums', labelKey: 'albums' },
   { key: 'artists', labelKey: 'artists' },
   { key: 'playlists', labelKey: 'playlists' },
+  { key: 'folders', labelKey: 'folders' },
 ] as const;
 
 /* ------------------------------------------------------------------ */
@@ -82,15 +84,22 @@ export function LibraryScreen() {
   useEffect(() => {
     if (!isFocused) return;
 
-    const layoutMap: Record<LibrarySegment, { layout: ItemLayout; toggle: () => void }> = {
+    const layoutMap: Record<Exclude<LibrarySegment, 'folders'>, { layout: ItemLayout; toggle: () => void }> = {
       albums: { layout: albumLayout, toggle: toggleAlbumLayout },
       artists: { layout: artistLayout, toggle: toggleArtistLayout },
       playlists: { layout: playlistLayout, toggle: togglePlaylistLayout },
       songs: { layout: songLayout, toggle: toggleSongLayout },
     };
 
-    const current = layoutMap[activeSegment];
     const store = filterBarStore.getState();
+    if (activeSegment === 'folders') {
+      store.setLayoutToggle(null);
+      store.setDownloadButtonConfig(null);
+      store.setHideDownloaded(true);
+      store.setHideFavorites(true);
+      return;
+    }
+    const current = layoutMap[activeSegment];
     store.setLayoutToggle({
       layout: current.layout,
       onToggle: current.toggle,
@@ -155,6 +164,9 @@ export function LibraryScreen() {
                 downloadedOnly={downloadedOnly}
                 contentInsetTop={contentInsetTop}
               />
+            )}
+            {activeSegment === 'folders' && (
+              <FolderLibraryListScreen contentInsetTop={contentInsetTop} />
             )}
             {activeSegment === 'songs' && (
               <SongLibraryListScreen
