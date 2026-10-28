@@ -3,6 +3,7 @@ jest.mock('@formatjs/intl-getcanonicallocales/polyfill-force.js', () => {});
 jest.mock('@formatjs/intl-locale/polyfill-force.js', () => {});
 jest.mock('@formatjs/intl-pluralrules/polyfill-force.js', () => {});
 jest.mock('@formatjs/intl-pluralrules/locale-data/en.js', () => {});
+jest.mock('@formatjs/intl-pluralrules/locale-data/pt.js', () => {});
 jest.mock('@formatjs/intl-pluralrules/locale-data/fr.js', () => {});
 jest.mock('@formatjs/intl-pluralrules/locale-data/de.js', () => {});
 jest.mock('@formatjs/intl-pluralrules/locale-data/es.js', () => {});
@@ -11,6 +12,7 @@ jest.mock('@formatjs/intl-pluralrules/locale-data/ru.js', () => {});
 jest.mock('@formatjs/intl-pluralrules/locale-data/zh.js', () => {});
 jest.mock('@formatjs/intl-numberformat/polyfill-force.js', () => {});
 jest.mock('@formatjs/intl-numberformat/locale-data/en.js', () => {});
+jest.mock('@formatjs/intl-numberformat/locale-data/pt.js', () => {});
 jest.mock('@formatjs/intl-numberformat/locale-data/fr.js', () => {});
 jest.mock('@formatjs/intl-numberformat/locale-data/de.js', () => {});
 jest.mock('@formatjs/intl-numberformat/locale-data/es.js', () => {});
@@ -20,6 +22,7 @@ jest.mock('@formatjs/intl-numberformat/locale-data/zh.js', () => {});
 jest.mock('@formatjs/intl-datetimeformat/polyfill-force.js', () => {});
 jest.mock('@formatjs/intl-datetimeformat/add-all-tz.js', () => {});
 jest.mock('@formatjs/intl-datetimeformat/locale-data/en.js', () => {});
+jest.mock('@formatjs/intl-datetimeformat/locale-data/pt.js', () => {});
 jest.mock('@formatjs/intl-datetimeformat/locale-data/fr.js', () => {});
 jest.mock('@formatjs/intl-datetimeformat/locale-data/de.js', () => {});
 jest.mock('@formatjs/intl-datetimeformat/locale-data/es.js', () => {});
@@ -51,6 +54,12 @@ describe('resolveAppLocale', () => {
   it('returns the 2-letter code for bare language tags', () => {
     expect(resolveAppLocale('en')).toBe('en');
     expect(resolveAppLocale('es')).toBe('es');
+  });
+
+  it('resolves Portuguese (Portugal) device locales to pt-PT', () => {
+    expect(resolveAppLocale('pt-PT')).toBe('pt-PT');
+    expect(resolveAppLocale('pt-Latn-PT')).toBe('pt-PT');
+    expect(resolveAppLocale('pt-BR')).toBe('pt');
   });
 
   it('lowercases the language subtag', () => {

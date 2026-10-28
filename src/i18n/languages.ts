@@ -6,6 +6,7 @@ export interface Language {
 
 export const SUPPORTED_LANGUAGES: Language[] = [
   { code: 'en', name: 'English', nativeName: 'English' },
+  { code: 'pt-PT', name: 'Portuguese (Portugal)', nativeName: 'Português (Portugal)' },
   { code: 'fr', name: 'French', nativeName: 'Français' },
   { code: 'de', name: 'German', nativeName: 'Deutsch' },
   { code: 'es', name: 'Spanish', nativeName: 'Español' },

@@ -3,12 +3,14 @@ jest.mock('@formatjs/intl-getcanonicallocales/polyfill-force.js', () => {});
 jest.mock('@formatjs/intl-locale/polyfill-force.js', () => {});
 jest.mock('@formatjs/intl-pluralrules/polyfill-force.js', () => {});
 jest.mock('@formatjs/intl-pluralrules/locale-data/en.js', () => {});
+jest.mock('@formatjs/intl-pluralrules/locale-data/pt.js', () => {});
 jest.mock('@formatjs/intl-pluralrules/locale-data/fr.js', () => {});
 jest.mock('@formatjs/intl-pluralrules/locale-data/de.js', () => {});
 jest.mock('@formatjs/intl-pluralrules/locale-data/es.js', () => {});
 jest.mock('@formatjs/intl-pluralrules/locale-data/it.js', () => {});
 jest.mock('@formatjs/intl-numberformat/polyfill-force.js', () => {});
 jest.mock('@formatjs/intl-numberformat/locale-data/en.js', () => {});
+jest.mock('@formatjs/intl-numberformat/locale-data/pt.js', () => {});
 jest.mock('@formatjs/intl-numberformat/locale-data/fr.js', () => {});
 jest.mock('@formatjs/intl-numberformat/locale-data/de.js', () => {});
 jest.mock('@formatjs/intl-numberformat/locale-data/es.js', () => {});
@@ -16,6 +18,7 @@ jest.mock('@formatjs/intl-numberformat/locale-data/it.js', () => {});
 jest.mock('@formatjs/intl-datetimeformat/polyfill-force.js', () => {});
 jest.mock('@formatjs/intl-datetimeformat/add-all-tz.js', () => {});
 jest.mock('@formatjs/intl-datetimeformat/locale-data/en.js', () => {});
+jest.mock('@formatjs/intl-datetimeformat/locale-data/pt.js', () => {});
 jest.mock('@formatjs/intl-datetimeformat/locale-data/fr.js', () => {});
 jest.mock('@formatjs/intl-datetimeformat/locale-data/de.js', () => {});
 jest.mock('@formatjs/intl-datetimeformat/locale-data/es.js', () => {});
@@ -50,6 +53,17 @@ describe('i18n', () => {
     expect(i18n.t('settings')).toBe('Settings');
     expect(i18n.t('search')).toBe('Search');
     expect(i18n.t('favorites')).toBe('Favorites');
+  });
+
+  it('loads Portuguese (Portugal) translations', async () => {
+    try {
+      await i18n.changeLanguage('pt-PT');
+      expect(i18n.language).toBe('pt-PT');
+      expect(i18n.t('home')).toBe('Início');
+      expect(i18n.t('library')).toBe('Biblioteca');
+    } finally {
+      await i18n.changeLanguage('en');
+    }
   });
 
   it('returns expected English text for known keys', () => {

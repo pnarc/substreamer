@@ -12,7 +12,8 @@ beforeEach(() => {
     favArtistLayout: 'list',
     albumSortOrder: 'artist',
     artistAlbumSortOrder: 'newest',
-    dateFormat: 'yyyy/mm/dd',
+    dateFormat: 'yyyy/dd/mm',
+    songCoverArtMode: 'perTrack',
     listLength: 20,
   });
 });
@@ -61,6 +62,16 @@ describe('layoutPreferencesStore', () => {
   it('setDateFormat changes date format', () => {
     layoutPreferencesStore.getState().setDateFormat('yyyy/dd/mm');
     expect(layoutPreferencesStore.getState().dateFormat).toBe('yyyy/dd/mm');
+  });
+
+  it('defaults to day/month dates and per-track cover art', () => {
+    expect(layoutPreferencesStore.getState().dateFormat).toBe('yyyy/dd/mm');
+    expect(layoutPreferencesStore.getState().songCoverArtMode).toBe('perTrack');
+  });
+
+  it('setSongCoverArtMode changes the song cover art mode', () => {
+    layoutPreferencesStore.getState().setSongCoverArtMode('album');
+    expect(layoutPreferencesStore.getState().songCoverArtMode).toBe('album');
   });
 
   it('has default listLength of 20', () => {

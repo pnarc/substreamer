@@ -17,6 +17,7 @@ import '@formatjs/intl-locale/polyfill-force.js';
 
 import '@formatjs/intl-pluralrules/polyfill-force.js';
 import '@formatjs/intl-pluralrules/locale-data/en.js';
+import '@formatjs/intl-pluralrules/locale-data/pt.js';
 import '@formatjs/intl-pluralrules/locale-data/fr.js';
 import '@formatjs/intl-pluralrules/locale-data/de.js';
 import '@formatjs/intl-pluralrules/locale-data/es.js';
@@ -26,6 +27,7 @@ import '@formatjs/intl-pluralrules/locale-data/zh.js';
 
 import '@formatjs/intl-numberformat/polyfill-force.js';
 import '@formatjs/intl-numberformat/locale-data/en.js';
+import '@formatjs/intl-numberformat/locale-data/pt.js';
 import '@formatjs/intl-numberformat/locale-data/fr.js';
 import '@formatjs/intl-numberformat/locale-data/de.js';
 import '@formatjs/intl-numberformat/locale-data/es.js';
@@ -36,6 +38,7 @@ import '@formatjs/intl-numberformat/locale-data/zh.js';
 import '@formatjs/intl-datetimeformat/polyfill-force.js';
 import '@formatjs/intl-datetimeformat/add-all-tz.js';
 import '@formatjs/intl-datetimeformat/locale-data/en.js';
+import '@formatjs/intl-datetimeformat/locale-data/pt.js';
 import '@formatjs/intl-datetimeformat/locale-data/fr.js';
 import '@formatjs/intl-datetimeformat/locale-data/de.js';
 import '@formatjs/intl-datetimeformat/locale-data/es.js';
@@ -67,6 +70,7 @@ try {
 
 // Locale JSON imports — add new imports here when enabling a language
 import en from './locales/en.json';
+import ptPT from './locales/pt-PT.json';
 import fr from './locales/fr.json';
 import de from './locales/de.json';
 import es from './locales/es.json';
@@ -82,6 +86,7 @@ import { localeStore } from '../store/localeStore';
 /** Registry mapping locale code to its translation bundle. */
 const localeResources: Record<string, { translation: Record<string, string> }> = {
   en: { translation: en },
+  'pt-PT': { translation: ptPT },
   fr: { translation: fr },
   de: { translation: de },
   es: { translation: es },
@@ -106,6 +111,10 @@ export function resolveAppLocale(tag: string | undefined | null): string | null 
   const parts = tag.split('-');
   const language = parts[0]?.toLowerCase();
   if (!language) return null;
+
+  if (language === 'pt' && parts.slice(1).some((part) => part.toUpperCase() === 'PT')) {
+    return 'pt-PT';
+  }
 
   if (language === 'zh') {
     // Inspect subtags after the language code for script / region hints.

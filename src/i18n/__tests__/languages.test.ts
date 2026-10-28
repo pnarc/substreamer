@@ -24,6 +24,14 @@ describe('SUPPORTED_LANGUAGES', () => {
     expect(english!.nativeName).toBe('English');
   });
 
+  it('includes Portuguese (Portugal)', () => {
+    expect(SUPPORTED_LANGUAGES).toContainEqual({
+      code: 'pt-PT',
+      name: 'Portuguese (Portugal)',
+      nativeName: 'Português (Portugal)',
+    });
+  });
+
   it('has no duplicate language codes', () => {
     const codes = SUPPORTED_LANGUAGES.map((l) => l.code);
     const uniqueCodes = new Set(codes);
@@ -44,6 +52,10 @@ describe('SUPPORTED_LOCALE_CODES', () => {
 
   it('contains "en"', () => {
     expect(SUPPORTED_LOCALE_CODES).toContain('en');
+  });
+
+  it('contains "pt-PT"', () => {
+    expect(SUPPORTED_LOCALE_CODES).toContain('pt-PT');
   });
 
   it('is an array of strings', () => {
